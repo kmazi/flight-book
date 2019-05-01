@@ -5,6 +5,8 @@ verify_ssl = true
 
 [dev-packages]
 factory-boy = "*"
+pylint = "*"
+flake8 = "*"
 
 [packages]
 django = "*"

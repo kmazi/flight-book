@@ -1,6 +1,7 @@
 from django.test import TestCase
 from factories import FlightFactory
 
+
 # Create your tests here.
 class TestUserModel(TestCase):
     pass
@@ -9,9 +10,9 @@ class TestUserModel(TestCase):
 class TestFlightModel(TestCase):
     def test_flight_model_attr(self):
         flight = FlightFactory()
-        assertIsNotNone(flight.name)
-        assertIsNotNone(flight.origin)
-        assertIsNotNone(flight.destination)
-        assertIsNotNone(flight.number)
-        assertIsNotNone(flight.departure_date)
-        assertIsNotNone(flight.departure_time)
+        self.assertIsNotNone(flight.name)
+        self.assertIsNotNone(flight.origin)
+        self.assertIsNotNone(flight.destination)
+        self.assertIsNotNone(flight.number)
+        self.assertIsNotNone(flight.departure_date)
+        self.assertIsNotNone(flight.departure_time)
