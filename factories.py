@@ -1,7 +1,10 @@
+from datetime import datetime as dt
+
 import factory
 from factory.fuzzy import FuzzyInteger
-from user.models import User
+
 from api import models
+from user.models import User
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -23,6 +26,8 @@ class FlightFactory(factory.django.DjangoModelFactory):
     name = factory.Faker('first_name')
     origin = factory.sequence(lambda a: f'Lagos{a}')
     destination = factory.Faker('address')
-    departure_time = factory.Faker('time')
-    departure_date = factory.Faker('date')
+    departure_time = dt.strptime(
+        factory.Faker('time').generate({}), "%H:%M:%S").time()
+    departure_date = dt.strptime(
+        factory.Faker('date').generate({}), "%Y-%m-%d").date()
     number = FuzzyInteger(12322)
