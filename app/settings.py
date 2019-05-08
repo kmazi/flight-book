@@ -29,6 +29,8 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
+HEROKU_APP_ID = config('HEROKU_APP_ID', default=None)
+
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'user.User'
@@ -127,4 +129,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Activate Django-Heroku.
-django_heroku.settings(locals())
+if HEROKU_APP_ID is not None:
+    django_heroku.settings(locals())

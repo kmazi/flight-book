@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/kmazi/flight-book.svg?style=svg)](https://circleci.com/gh/kmazi/flight-book)
+
 # Flight-book
 An application for booking flights to a given destination.
 
