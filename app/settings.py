@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 from decouple import config
+import django_heroku
 from dj_database_url import parse as db_url
 
 
@@ -27,6 +28,8 @@ SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
+
+HEROKU_APP_ID = config('HEROKU_APP_ID', default=None)
 
 ALLOWED_HOSTS = []
 
@@ -124,3 +127,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Activate Django-Heroku.
+if HEROKU_APP_ID is not None:
+    django_heroku.settings(locals())
