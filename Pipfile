@@ -18,6 +18,7 @@ pytest-cov = "*"
 pytest-django = "*"
 gunicorn = "*"
 django-heroku = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.6"
