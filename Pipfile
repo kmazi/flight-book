@@ -7,6 +7,7 @@ verify_ssl = true
 factory-boy = "*"
 pylint = "*"
 flake8 = "*"
+coveralls = "*"
 
 [packages]
 django = "*"
@@ -14,8 +15,6 @@ djangorestframework = "*"
 dj-database-url = "*"
 python-decouple = "*"
 psycopg2 = "*"
-pytest-cov = "*"
-pytest-django = "*"
 gunicorn = "*"
 django-heroku = "*"
 whitenoise = "*"
