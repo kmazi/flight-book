@@ -8,6 +8,9 @@ factory-boy = "*"
 pylint = "*"
 flake8 = "*"
 coveralls = "*"
+pytest-cov = "*"
+pytest-django = "*"
+v = {editable = true,version = "*"}
 
 [packages]
 django = "*"

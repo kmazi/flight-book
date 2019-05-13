@@ -31,13 +31,6 @@ jobs:
         - restore_cache:  # ensure this step occurs *before* installing dependencies
             key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
 
-        # Download and cache dependencies
-        #   - restore_cache:
-        #       keys:
-        #         - v1-dependencies-{{ checksum "requirements.txt" }}
-        #         # fallback to using the latest cache if no exact match is found
-        #         - v1-dependencies-
-
         - run:
             name: install dependencies
             command: |
@@ -62,13 +55,11 @@ jobs:
                 mkdir test-results
                 mkdir test-reports
                 pipenv run python manage.py test
+                coverage run --source=api manage.py test
+            when: true
+
         - store_test_results:
             path: test-results
         - store_artifacts:
             path: test-reports
             destination: trl
-    test:
-        override:
-            - coverage run --source=<user, api> manage.py test
-        post:
-            - coveralls
