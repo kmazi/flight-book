@@ -62,13 +62,13 @@ jobs:
                 mkdir test-results
                 mkdir test-reports
                 pipenv run python manage.py test
-        test:
-            override:
-                - coverage run --source=<user, api> manage.py test
-            post:
-                - coveralls
         - store_test_results:
             path: test-results
         - store_artifacts:
             path: test-reports
             destination: trl
+    test:
+        override:
+            - coverage run --source=<user, api> manage.py test
+        post:
+            - coveralls
