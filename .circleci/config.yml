@@ -57,8 +57,8 @@ jobs:
                 pipenv run python manage.py test
                 coverage run --source api,user manage.py test
         - run:
-          name: Report coverage
-          command: coverage html -d reports
+            name: Report coverage
+            command: coverage html -d reports
 
         - store_test_results:
             path: test-results
