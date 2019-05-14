@@ -55,7 +55,7 @@ jobs:
                 mkdir test-results
                 mkdir test-reports
                 pipenv run python manage.py test
-                coverage run --source api,user manage.py test
+                pipenv coverage run --source api,user manage.py test
         - run:
             name: Report coverage
             command: coverage html -d reports
