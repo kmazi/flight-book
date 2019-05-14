@@ -55,8 +55,10 @@ jobs:
                 mkdir test-results
                 mkdir test-reports
                 pipenv run python manage.py test
-                coverage run --source=api manage.py test
-            when: "on_fail"
+                coverage run --source api,user manage.py test
+        - run:
+          name: Report coverage
+          command: coverage html -d reports
 
         - store_test_results:
             path: test-results
