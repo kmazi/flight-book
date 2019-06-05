@@ -1,3 +1,6 @@
+[![CircleCI](https://circleci.com/gh/kmazi/flight-book.svg?style=svg)](https://circleci.com/gh/kmazi/flight-book)
+[![Coverage Status](https://coveralls.io/repos/github/kmazi/flight-book/badge.svg)](https://coveralls.io/github/kmazi/flight-book)
+
 # Flight-book
 An application for booking flights to a given destination.
 

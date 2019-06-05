@@ -7,6 +7,10 @@ verify_ssl = true
 factory-boy = "*"
 pylint = "*"
 flake8 = "*"
+coveralls = "*"
+pytest-cov = "*"
+pytest-django = "*"
+v = {editable = true,version = "*"}
 
 [packages]
 django = "*"
@@ -14,6 +18,9 @@ djangorestframework = "*"
 dj-database-url = "*"
 python-decouple = "*"
 psycopg2 = "*"
+gunicorn = "*"
+django-heroku = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.6"
