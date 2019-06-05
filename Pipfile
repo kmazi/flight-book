@@ -11,6 +11,7 @@ coveralls = "*"
 pytest-cov = "*"
 pytest-django = "*"
 v = {editable = true,version = "*"}
+coreapi-cli = "*"
 
 [packages]
 django = "*"
