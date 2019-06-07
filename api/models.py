@@ -3,6 +3,7 @@ from django.db import models
 
 # Create your models here.
 class Flight(models.Model):
+    """Flight model definition."""
 
     ECONOMIC = "economic"
     BUSINESS = "business"
@@ -12,6 +13,7 @@ class Flight(models.Model):
         (BUSINESS, "business class"),
         (FIRST_CLASS, "first class"),
     ]
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     origin = models.CharField(max_length=100)
     destination = models.CharField(max_length=100)
@@ -19,6 +21,6 @@ class Flight(models.Model):
     departure_date = models.DateField(null=True)
     plane_type = models.CharField(max_length=100,
                                   choices=FLIGHT_TYPES,
-                                  default=FLIGHT_TYPES[0][0])
+                                  default=ECONOMIC)
 
     records = models.Manager()

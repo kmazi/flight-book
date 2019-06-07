@@ -22,6 +22,7 @@ psycopg2 = "*"
 gunicorn = "*"
 django-heroku = "*"
 whitenoise = "*"
+django-filter = "*"
 
 [requires]
 python_version = "3.6"

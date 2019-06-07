@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
     "user",
     "api",
 ]
@@ -77,7 +78,10 @@ TEMPLATES = [
 ]
 
 REST_FRAMEWORK = {
-    "TEST_REQUEST_DEFAULT_FORMAT": "json"
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
 }
 
 WSGI_APPLICATION = "app.wsgi.application"
