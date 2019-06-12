@@ -16,8 +16,8 @@ class Flight(models.Model):
     id = models.AutoField(primary_key=True)
     origin = models.CharField(max_length=100)
     destination = models.CharField(max_length=100)
-    return_date = models.DateField(null=True)
-    departure_date = models.DateField(null=True)
+    return_date = models.DateField()
+    departure_date = models.DateField()
     plane_type = models.CharField(max_length=100,
                                   choices=FLIGHT_TYPES,
                                   default=ECONOMIC)

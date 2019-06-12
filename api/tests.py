@@ -38,6 +38,10 @@ class TestFlightReservation(APITestCase):
 
     client = APIClient()
 
+    def setUp(self):
+        """Define variables available to all test methods."""
+        self.flights = [FlightFactory(), FlightFactory(), FlightFactory()]
+
     def test_reserving_flight(self):
         """Test that user can reserve flight."""
         data = {
@@ -50,6 +54,7 @@ class TestFlightReservation(APITestCase):
         }
         response = self.client.post(reverse("flight-list"), data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIsNotNone(response.data["id"])
         self.assertEqual(response.data["origin"], data["origin"])
         self.assertEqual(response.data["destination"], data["destination"])
         self.assertEqual(response.data["departure_date"],
@@ -59,8 +64,23 @@ class TestFlightReservation(APITestCase):
 
     def test_retrieving_reserved_flights(self):
         """Test that user can retrieve flight reservations."""
-        flights = [FlightFactory(), FlightFactory()]
+        flight_a = self.flights[0]
 
         response = self.client.get(reverse("flight-list"))
+        flight_res = Flight.records.first()
+        self.assertEqual(flight_res.departure_date, flight_a.departure_date)
+        self.assertEqual(flight_res.return_date, flight_a.return_date)
+        self.assertEqual(flight_res.origin, flight_a.origin)
+        self.assertEqual(flight_res.destination, flight_a.destination)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), len(flights))
+        self.assertEqual(len(response.data), len(self.flights))
+
+    def test_retrieving_reserved_flights_for_given_date(self):
+        """Test that flights for a specific date can be retrieved."""
+        date = dt.today().date() + timedelta(weeks=2)
+        FlightFactory(departure_date=date)
+        response = self.client.get(
+            f"{reverse('flight-list')}?departure_date={date}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["departure_date"], date.isoformat())

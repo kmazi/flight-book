@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "user",
     "api",
+    "django_filters",
 ]
 
 MIDDLEWARE = [
@@ -78,10 +79,13 @@ TEMPLATES = [
 ]
 
 REST_FRAMEWORK = {
-    "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    "TEST_REQUEST_DEFAULT_FORMAT":
+    "json",
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
-    ]
+    ],
+    "DEFAULT_FILTER_BACKENDS":
+    ("django_filters.rest_framework.DjangoFilterBackend", ),
 }
 
 WSGI_APPLICATION = "app.wsgi.application"
@@ -102,7 +106,7 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME":
-        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator", # noqa
+        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa
     },
     {
         "NAME":
