@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/kmazi/flight-book.svg?style=svg)](https://circleci.com/gh/kmazi/flight-book)
+[![CircleCI](https://circleci.com/gh/kmazi/flight-book/tree/develop.svg?style=svg)](https://circleci.com/gh/kmazi/flight-book/tree/develop)
 [![Coverage Status](https://coveralls.io/repos/github/kmazi/flight-book/badge.svg?branch=develop)](https://coveralls.io/github/kmazi/flight-book?branch=develop)
 
 # Flight-book

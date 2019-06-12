@@ -1,4 +1,9 @@
 [report]
-omit = */migrations/*
+omit =
+    */migrations/*
+    */tests.py
+    */app/*
 [run]
-omit = */.virtualenvs/*
+omit = 
+    */.virtualenvs/*
+    */.venv/*
