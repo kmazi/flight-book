@@ -5,4 +5,4 @@ from .views import FlightViewset
 
 
 router = routers.SimpleRouter()
-router.register(r"flight/reservation", FlightViewset, basename="flight")
+router.register(r"flight/reservations", FlightViewset, basename="flight")
