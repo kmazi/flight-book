@@ -1,4 +1,6 @@
 [report]
 omit = */migrations/*
 [run]
-omit = */.virtualenvs/*
+omit = 
+    */.virtualenvs/*
+    */.venv/*
