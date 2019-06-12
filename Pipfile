@@ -25,3 +25,6 @@ django-filter = "*"
 
 [requires]
 python_version = "3.6"
+
+[scripts]
+start = "python manage.py runserver"

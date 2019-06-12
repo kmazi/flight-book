@@ -21,8 +21,6 @@ class TestFlightModel(TestCase):
         """Test that all flight model attributes are accurate."""
         flight = FlightFactory()
         flight_obj = Flight.records.get(pk=flight.id)
-        self.assertIsNotNone(flight.name)
-        self.assertEqual(flight_obj.name, flight.name)
         self.assertIsNotNone(flight.origin)
         self.assertEqual(flight_obj.origin, flight.origin)
         self.assertIsNotNone(flight.destination)
@@ -52,7 +50,6 @@ class TestFlightReservation(APITestCase):
         }
         response = self.client.post(reverse("flight-list"), data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["name"], data["name"])
         self.assertEqual(response.data["origin"], data["origin"])
         self.assertEqual(response.data["destination"], data["destination"])
         self.assertEqual(response.data["departure_date"],

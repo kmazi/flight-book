@@ -14,7 +14,6 @@ class Flight(models.Model):
         (FIRST_CLASS, "first class"),
     ]
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
     origin = models.CharField(max_length=100)
     destination = models.CharField(max_length=100)
     return_date = models.DateField(null=True)
