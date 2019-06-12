@@ -29,7 +29,7 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 HEROKU_APP_ID = config("HEROKU_APP_ID", default=None)
 
-ALLOWED_HOSTS = ['flightbookie.herokuapp.com']
+ALLOWED_HOSTS = ["127.0.0.1", "flightbookie.herokuapp.com"]
 
 AUTH_USER_MODEL = "user.User"
 # Application definition
