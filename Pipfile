@@ -11,6 +11,7 @@ coveralls = "*"
 pytest-cov = "*"
 pytest-django = "*"
 v = {editable = true,version = "*"}
+coreapi-cli = "*"
 
 [packages]
 django = "*"
@@ -21,6 +22,7 @@ psycopg2 = "*"
 gunicorn = "*"
 django-heroku = "*"
 whitenoise = "*"
+django-filter = "*"
 
 [requires]
 python_version = "3.6"

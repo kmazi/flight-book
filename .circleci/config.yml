@@ -54,7 +54,7 @@ jobs:
             command: |
                 mkdir test-results
                 mkdir test-reports
-                pipenv run python manage.py test
+                pipenv run py.test --cov
         - run:
             name: Run coverage
             command: pipenv run coverage run --source api,user -m py.test
