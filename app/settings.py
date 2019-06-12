@@ -29,7 +29,7 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 HEROKU_APP_ID = config("HEROKU_APP_ID", default=None)
 
-ALLOWED_HOSTS = ['flightbookie.herokuapp.com']
+ALLOWED_HOSTS = ["127.0.0.1", "flightbookie.herokuapp.com"]
 
 AUTH_USER_MODEL = "user.User"
 # Application definition
@@ -79,8 +79,8 @@ TEMPLATES = [
 
 REST_FRAMEWORK = {
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
     ]
 }
 
