@@ -29,7 +29,7 @@ DEBUG = config("DEBUG", default=False, cast=bool)
 
 HEROKU_APP_ID = config("HEROKU_APP_ID", default=None)
 
-ALLOWED_HOSTS = ["127.0.0.1", "flightbookie.herokuapp.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "flightbookie.herokuapp.com"]
 
 AUTH_USER_MODEL = "user.User"
 # Application definition
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "user",
     "api",
+    "django_filters",
 ]
 
 MIDDLEWARE = [
@@ -78,10 +79,13 @@ TEMPLATES = [
 ]
 
 REST_FRAMEWORK = {
-    "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    "TEST_REQUEST_DEFAULT_FORMAT":
+    "json",
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
-    ]
+    ],
+    "DEFAULT_FILTER_BACKENDS":
+    ("django_filters.rest_framework.DjangoFilterBackend", ),
 }
 
 WSGI_APPLICATION = "app.wsgi.application"
@@ -102,7 +106,7 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME":
-        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator", # noqa
+        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa
     },
     {
         "NAME":

@@ -20,9 +20,7 @@ class TestFlightModel(TestCase):
     def test_flight_model_attr(self):
         """Test that all flight model attributes are accurate."""
         flight = FlightFactory()
-        flight_obj = Flight.records.get(pk=flight.id)
-        self.assertIsNotNone(flight.name)
-        self.assertEqual(flight_obj.name, flight.name)
+        flight_obj = Flight.records.get(pk=flight.id)  # pylint: disable=no-member # noqa
         self.assertIsNotNone(flight.origin)
         self.assertEqual(flight_obj.origin, flight.origin)
         self.assertIsNotNone(flight.destination)
@@ -40,10 +38,14 @@ class TestFlightReservation(APITestCase):
 
     client = APIClient()
 
+    def setUp(self):
+        """Define variables available to all test methods."""
+        self.flights = [FlightFactory(), FlightFactory(), FlightFactory()]
+        self.test_date = dt.today().date() + timedelta(weeks=2)
+
     def test_reserving_flight(self):
         """Test that user can reserve flight."""
         data = {
-            "name": "Samuel Smith",
             "origin": "lagos",
             "destination": "portharcourt",
             "departure_date": dt.now().date() + timedelta(2),
@@ -51,8 +53,10 @@ class TestFlightReservation(APITestCase):
             "plane_type": "business"
         }
         response = self.client.post(reverse("flight-list"), data)
+        booked_flight = Flight.records.get(destination=data["destination"])
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["name"], data["name"])
+        self.assertIsNotNone(response.data["id"])
+        self.assertEqual(response.data["id"], booked_flight.id)
         self.assertEqual(response.data["origin"], data["origin"])
         self.assertEqual(response.data["destination"], data["destination"])
         self.assertEqual(response.data["departure_date"],
@@ -62,8 +66,44 @@ class TestFlightReservation(APITestCase):
 
     def test_retrieving_reserved_flights(self):
         """Test that user can retrieve flight reservations."""
-        flights = [FlightFactory(), FlightFactory()]
+        flight_a = self.flights[0]
 
         response = self.client.get(reverse("flight-list"))
+        flight_res = Flight.records.first()
+        self.assertEqual(flight_res.id, flight_a.id)  # pylint: disable=no-member # noqa
+        self.assertEqual(flight_res.departure_date, flight_a.departure_date)
+        self.assertEqual(flight_res.return_date, flight_a.return_date)
+        self.assertEqual(flight_res.origin, flight_a.origin)
+        self.assertEqual(flight_res.destination, flight_a.destination)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), len(flights))
+        self.assertEqual(len(response.data), len(self.flights))
+
+    def test_retrieving_reserved_flights_for_given_date(self):
+        """Test that flights for a specific date can be retrieved."""
+        FlightFactory(departure_date=self.test_date)
+        response = self.client.get(
+            f"{reverse('flight-list')}?departure={self.test_date}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["departure_date"],
+                         self.test_date.isoformat())
+
+    def test_retrieving_reserved_flights_by_return_dates(self):
+        """Test retrieving return flights scheduled for a specific days."""
+        FlightFactory(return_date=self.test_date)
+        response = self.client.get(
+            f"{reverse('flight-list')}?return_date={self.test_date}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]["return_date"],
+                         self.test_date.isoformat())
+
+    def test_retrieve_flights_by_both_return_and_departure_dates(self):
+        """Test querying flights by both return and departure date."""
+        FlightFactory(return_date=self.test_date)
+        base_url = reverse("flight-list")
+        response = self.client.get(
+            "{}?return_date={}&departure_date={}".format(
+                base_url, self.test_date, self.flights[0].departure_date))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 0)

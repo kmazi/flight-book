@@ -1,6 +1,9 @@
 from datetime import datetime as dt
+from datetime import timedelta
 
 import factory
+from factory.fuzzy import FuzzyChoice, FuzzyDate
+
 from api import models
 from user.models import User
 
@@ -20,11 +23,11 @@ class FlightFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Flight
 
-    name = factory.Faker("first_name")
     origin = factory.Faker("city")
     destination = factory.Faker("city")
-    return_date = dt.strptime(
-        factory.Faker("date").generate({}), "%Y-%m-%d").date()
-    departure_date = dt.strptime(
-        factory.Faker("date").generate({}), "%Y-%m-%d").date()
-    plane_type = "economic"
+    return_date = FuzzyDate(dt.today().date(),
+                            end_date=dt.today().date() + timedelta(weeks=52))
+    departure_date = FuzzyDate(dt.today().date(),
+                               end_date=dt.today().date() +
+                               timedelta(weeks=52))
+    plane_type = FuzzyChoice(["economic", "business", "first_class"])

@@ -11,6 +11,7 @@ coveralls = "*"
 pytest-django = "*"
 v = {editable = true,version = "*"}
 coreapi-cli = "*"
+yapf = "*"
 
 [packages]
 django = "*"
@@ -25,3 +26,7 @@ django-filter = "*"
 
 [requires]
 python_version = "3.6"
+
+[scripts]
+start = "python manage.py runserver"
+test = "python manage.py test"
