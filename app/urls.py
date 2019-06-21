@@ -19,17 +19,19 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView)
 
 from api.urls import router
-from user.urls import router as rter
+from api.views import home
+from user.urls import router as user_router
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include(router.urls)),
-    path("account/", include(rter.urls)),
+    path("account/", include(user_router.urls)),
     path("api/token/",
          TokenObtainPairView.as_view(),
          name="token_obtain_pair"),
     path("api/token/refresh/",
          TokenRefreshView.as_view(),
          name="token_refresh"),
+    path("", home, name="home")
 ]

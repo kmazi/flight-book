@@ -9,6 +9,9 @@ UserModel = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     """User serializer definition."""
 
+    password = serializers.CharField(write_only=True)
+    email = serializers.EmailField(required=True)
+
     class Meta:
         """Meta for user serializer."""
 
@@ -28,14 +31,3 @@ class UserSerializer(serializers.ModelSerializer):
             "is_active",
             "is_staff",
         )
-        extra_kwargs = {"password": {"write_only": True}}
-
-    def create(self, validate_data):
-        """Create a user."""
-        user = UserModel.objects.create(username=validate_data["username"],
-                                        email=validate_data["email"],
-                                        first_name=validate_data["first_name"],
-                                        last_name=validate_data["last_name"])
-        user.set_password(validate_data["password"])
-        user.save()
-        return user
