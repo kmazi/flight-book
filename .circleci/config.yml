@@ -61,7 +61,7 @@ jobs:
             command: |
                 pipenv run coverage report
                 pipenv run coverage html
-                # pipenv run coveralls
+                pipenv run coveralls
 
         - store_artifacts:
             path: htmlcov
