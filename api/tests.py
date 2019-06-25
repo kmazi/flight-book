@@ -1,8 +1,12 @@
 """Test flight functionalities."""
+# pylint: disable=no-member
+
 
 from datetime import datetime as dt
 from datetime import timedelta
 
+import pytest
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -37,32 +41,46 @@ class TestFlightReservation(APITestCase):
     """Test flight reservation functionalities."""
 
     client = APIClient()
+    User = get_user_model()
+    data = {
+        "origin": "lagos",
+        "destination": "portharcourt",
+        "departure_date": dt.now().date() + timedelta(2),
+        "return_date": dt.now().date() + timedelta(7),
+        "plane_type": "business"
+    }
 
     def setUp(self):
         """Define variables available to all test methods."""
         self.flights = [FlightFactory(), FlightFactory(), FlightFactory()]
         self.test_date = dt.today().date() + timedelta(weeks=2)
+        self.user = self.User.objects.create(username="james",
+                                             password="testing",
+                                             email="james@gmail.com")
+        self.client.force_authenticate(user=self.user)
 
+    def test_fail_to_book_flight_when_unauthenticated(self):
+        """User shouldn't be able to book flight when not authenticated."""
+        self.client.force_authenticate(user=None)
+        response = self.client.post(reverse("flight-list"), self.data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    @pytest.mark.one
     def test_reserving_flight(self):
         """Test that user can reserve flight."""
-        data = {
-            "origin": "lagos",
-            "destination": "portharcourt",
-            "departure_date": dt.now().date() + timedelta(2),
-            "return_date": dt.now().date() + timedelta(7),
-            "plane_type": "business"
-        }
-        response = self.client.post(reverse("flight-list"), data)
-        booked_flight = Flight.records.get(destination=data["destination"])
+        response = self.client.post(reverse("flight-list"), self.data)
+        booked_flight = Flight.records.get(
+            destination=self.data["destination"])
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIsNotNone(response.data["id"])
         self.assertEqual(response.data["id"], booked_flight.id)
-        self.assertEqual(response.data["origin"], data["origin"])
-        self.assertEqual(response.data["destination"], data["destination"])
+        self.assertEqual(response.data["origin"], self.data["origin"])
+        self.assertEqual(response.data["destination"],
+                         self.data["destination"])
         self.assertEqual(response.data["departure_date"],
-                         data["departure_date"].strftime("%Y-%m-%d"))
+                         self.data["departure_date"].strftime("%Y-%m-%d"))
         self.assertEqual(response.data["return_date"],
-                         data["return_date"].strftime("%Y-%m-%d"))
+                         self.data["return_date"].strftime("%Y-%m-%d"))
 
     def test_retrieving_reserved_flights(self):
         """Test that user can retrieve flight reservations."""

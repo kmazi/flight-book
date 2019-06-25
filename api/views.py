@@ -14,7 +14,6 @@ from .serializers import FlightSerializer
 # Create your views here.
 class FlightViewset(ModelViewSet):
     """Flight viewset."""
-
     queryset = Flight.records.all()
     serializer_class = FlightSerializer
     filterset_class = FlightFilter
