@@ -100,3 +100,9 @@ class TestUserLogin(APITestCase, BaseTest):
         data = {"username": self.user.username, "password": "wrongpassword"}
         response = self.client.post(reverse("login"), data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_login_fails_when_no_username_in_form_is_sent(self):
+        """Auth should fail when either username or password is missing."""
+        data = {"password": self.user_attr["password"]}
+        response = self.client.post(reverse("login"), data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
