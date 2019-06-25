@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "user",
     "api",
     "django_filters",
+    "rest_framework_swagger",
 ]
 
 MIDDLEWARE = [

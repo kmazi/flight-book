@@ -24,10 +24,11 @@ django-heroku = "*"
 whitenoise = "*"
 django-filter = "*"
 djangorestframework-simplejwt = "*"
+django-rest-swagger = "*"
 
 [requires]
 python_version = "3.6"
 
 [scripts]
 start = "python manage.py runserver"
-test = "python manage.py test"
+test = "pytest -s"

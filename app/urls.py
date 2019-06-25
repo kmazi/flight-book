@@ -20,13 +20,16 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,
 
 from api.urls import router
 from api.views import home
-from user.urls import router as user_router
+from rest_framework_swagger.views import get_swagger_view
 
+
+schema_view = get_swagger_view(title="Flightbookie API")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include(router.urls)),
-    path("account/", include(user_router.urls)),
+    path("account/", include("user.urls")),
+    path("docs/", schema_view),
     path("api/token/",
          TokenObtainPairView.as_view(),
          name="token_obtain_pair"),
