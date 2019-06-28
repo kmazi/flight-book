@@ -10,6 +10,7 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
+from api.mail import get_mail_notifications
 from factories import FlightFactory
 
 from .models import Flight
@@ -156,3 +157,13 @@ class TestFlightBooking(BaseTestClass):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(str(response.data[0]),
                          "Flight has already been booked by you")
+
+
+class TestMailMessaging(TestCase):
+    """Define tests for flight mail notifications."""
+
+    def test_no_message_is_formed_when_there_is_no_flight_available(self):
+        """App shouldn't generate messages when there are no scheduled flight."""  # noqa
+        emails = get_mail_notifications()
+        self.assertTrue(isinstance(emails, list))
+        self.assertEqual(len(emails), 0)
