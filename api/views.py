@@ -4,13 +4,14 @@ from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.decorators import action, api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 from rest_framework.viewsets import ModelViewSet
 
 from .filters import FlightFilter
 from .models import Flight
+from .permissions import AllowAuthenicUserPatch, IsAdminWriteOnly
 from .serializers import FlightSerializer
 
 
@@ -19,6 +20,8 @@ class FlightViewset(ModelViewSet):
     """Flight viewset."""
 
     queryset = Flight.records.all()
+    permission_classes = (IsAuthenticatedOrReadOnly,
+                          IsAdminWriteOnly | AllowAuthenicUserPatch)
     serializer_class = FlightSerializer
     filterset_class = FlightFilter
 

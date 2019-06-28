@@ -58,7 +58,13 @@ class BaseTestClass(APITestCase):
 
 
 class TestFlightCreation(BaseTestClass):
-    """Test flight reservation functionalities."""
+    """Test flight creation functionalities."""
+
+    def setUp(self):
+        """Define custom setup for flight creation."""
+        super().setUp()
+        self.user.is_staff = True
+        self.user.save()
 
     def test_fail_to_create_flight_when_unauthenticated(self):
         """User shouldn't be able to book flight when not authenticated."""
@@ -66,7 +72,16 @@ class TestFlightCreation(BaseTestClass):
         response = self.client.post(reverse("flight-list"), self.data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_creating_flight(self):
+    def test_only_admin_can_create_flights(self):
+        """App should disallow non admins from creating flights."""
+        self.user.is_staff = False
+        self.user.save()
+        response = self.client.post(reverse("flight-list"), self.data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(str(response.data["detail"]),
+                         "You do not have permission to perform this action.")
+
+    def test_creating_flight_as_admin(self):
         """Test that user can reserve flight."""
         response = self.client.post(reverse("flight-list"), self.data)
         booked_flight = Flight.records.get(
@@ -82,6 +97,10 @@ class TestFlightCreation(BaseTestClass):
                          self.data["departure_date"].strftime("%Y-%m-%d"))
         self.assertEqual(response.data["return_date"],
                          self.data["return_date"].strftime("%Y-%m-%d"))
+
+
+class TestFetchingFlight(BaseTestClass):
+    """Test fetching flight functionalities."""
 
     def test_retrieving_flights(self):
         """Test that user can retrieve flight reservations."""
