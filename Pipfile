@@ -7,10 +7,8 @@ verify_ssl = true
 factory-boy = "*"
 pylint = "*"
 flake8 = "*"
-coveralls = "*"
 pytest-django = "*"
 v = {editable = true,version = "*"}
-coreapi-cli = "*"
 yapf = "*"
 
 [packages]
@@ -25,6 +23,9 @@ whitenoise = "*"
 django-filter = "*"
 djangorestframework-simplejwt = "*"
 django-rest-swagger = "*"
+coreapi-cli = "*"
+python-coveralls = "*"
+coveralls = "*"
 
 [requires]
 python_version = "3.6"

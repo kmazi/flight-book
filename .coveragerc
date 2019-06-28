@@ -3,6 +3,7 @@ omit =
     */migrations/*
     */tests.py
     */app/*
+    */apps.py
 [run]
 omit = 
     */.virtualenvs/*
