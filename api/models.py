@@ -1,7 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils import timezone
 
 
 # Create your models here.
@@ -19,9 +20,7 @@ class Flight(models.Model):
     id = models.AutoField(primary_key=True)
     origin = models.CharField(max_length=100)
     destination = models.CharField(max_length=100)
-    return_date = models.DateField(default=datetime.today().date() +
-                                   timedelta(days=3))
-    departure_date = models.DateField(default=datetime.today().date() +
+    departure_date = models.DateField(default=timezone.now().date() +
                                       timedelta(days=1))
     passengers = models.ManyToManyField(get_user_model())
     plane_type = models.CharField(max_length=100,
