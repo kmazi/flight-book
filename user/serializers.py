@@ -9,7 +9,10 @@ UserModel = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     """User serializer definition."""
 
-    password = serializers.CharField(write_only=True)
+    password = serializers.RegexField(r"^[a-zA-Z]\w{3,14}$",
+                                      write_only=True,
+                                      min_length=6,
+                                      max_length=15)
     email = serializers.EmailField(required=True)
 
     class Meta:
