@@ -10,6 +10,7 @@ flake8 = "*"
 pytest-django = "*"
 v = {editable = true,version = "*"}
 yapf = "*"
+mock = "*"
 
 [packages]
 django = "*"
