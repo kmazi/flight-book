@@ -3,6 +3,7 @@
 
 from datetime import timedelta
 
+import mock
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -10,8 +11,8 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
-from api.mail import get_mail_notifications
-from factories import FlightFactory
+from api.mail import get_mail_notifications, send_mail_notifications
+from factories import FlightFactory, UserFactory
 
 from .models import Flight
 
@@ -162,8 +163,59 @@ class TestFlightBooking(BaseTestClass):
 class TestMailMessaging(TestCase):
     """Define tests for flight mail notifications."""
 
+    def generate_flight_and_passengers_for_test(self):
+        """Prepare flight and user objects for mail test."""
+        tomorrow = timezone.now().date() + timedelta(days=1)
+        flights = [
+            FlightFactory(departure_date=tomorrow),
+            FlightFactory(departure_date=tomorrow)
+        ]
+        users = [UserFactory(), UserFactory()]
+        # Add user 1 to flight 1
+        flights[0].passengers.add(users[0])
+        flights[0].save()
+
+        # Add user 2 to flight 2
+        flights[1].passengers.add(users[1])
+        flights[1].save()
+        return users
+
     def test_no_message_is_formed_when_there_is_no_flight_available(self):
         """App shouldn't generate messages when there are no scheduled flight."""  # noqa
         emails = get_mail_notifications()
         self.assertTrue(isinstance(emails, list))
         self.assertEqual(len(emails), 0)
+
+    @mock.patch("api.mail.mail.get_connection")
+    def test_send_mail_notification_not_called_when_no_mail_to_send(
+            self, get_connection):
+        """App shouldn't attempt to send mail when there is none."""
+        # Call send_mail_notification when no flight has been booked
+        con = get_connection()
+        con.send_messages = mock.MagicMock()
+        send_mail_notifications()
+        self.assertFalse(con.send_messages.called)
+
+    def test_generate_mail_messages_for_due_flight_passengers(self):
+        """App should generate mail messages for passengers' flight notice."""
+        users = self.generate_flight_and_passengers_for_test()
+        emails = get_mail_notifications()
+        self.assertTrue(isinstance(emails, list))
+        self.assertEqual(len(emails), len(users))
+
+    @mock.patch("api.mail.mail.get_connection")
+    def test_send_mail_notification_called_on_sending_fligh_mail_notification(
+            self, get_connection):
+        """App should send mail notification to passengers.
+
+        passengers whose flight date is about one day more should receive
+        mail notification. Thus the app should call the send_messages() when
+        triggered.
+
+        """
+        self.generate_flight_and_passengers_for_test()
+        # Call send_mail_notification after flights have been booked
+        con = get_connection()
+        con.send_messages = mock.MagicMock()
+        send_mail_notifications()
+        self.assertTrue(con.send_messages.called)

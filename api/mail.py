@@ -26,8 +26,7 @@ def get_mail_notifications():
                               origin=flight.origin,
                               departure_date=flight.departure_date),
                           from_email=admin_mail,
-                          to=["touchstone@gmail.com"],
-                          bcc=[]) for flight in scheduled_flights
+                          to=[passenger.email]) for flight in scheduled_flights
         for passenger in flight.passengers.all()
     ]
     return mail_messages
@@ -37,4 +36,5 @@ def send_mail_notifications():
     """Send emails notifying passengers of their flights."""
     connection = mail.get_connection()
     messages = get_mail_notifications()
-    connection.send_messages(messages)
+    if messages:
+        connection.send_messages(messages)
