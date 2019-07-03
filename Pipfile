@@ -11,6 +11,9 @@ pytest-django = "*"
 v = {editable = true,version = "*"}
 yapf = "*"
 mock = "*"
+locustio = "*"
+python-coveralls = "*"
+coveralls = "*"
 
 [packages]
 django = "*"
@@ -25,8 +28,6 @@ django-filter = "*"
 djangorestframework-simplejwt = "*"
 django-rest-swagger = "*"
 coreapi-cli = "*"
-python-coveralls = "*"
-coveralls = "*"
 apscheduler = "*"
 
 [requires]

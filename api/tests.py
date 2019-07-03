@@ -8,7 +8,6 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-from mock import MagicMock
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
@@ -193,7 +192,7 @@ class TestMailMessaging(TestCase):
         """App shouldn't attempt to send mail when there is none."""
         # Call send_mail_notification when no flight has been booked
         con = get_connection()
-        con.send_messages = MagicMock()
+        con.send_messages = mock.MagicMock()
         send_mail_notifications()
         self.assertFalse(con.send_messages.called)
 
@@ -217,6 +216,6 @@ class TestMailMessaging(TestCase):
         self.generate_flight_and_passengers_for_test()
         # Call send_mail_notification after flights have been booked
         con = get_connection()
-        con.send_messages = MagicMock()
+        con.send_messages = mock.MagicMock()
         send_mail_notifications()
         self.assertTrue(con.send_messages.called)

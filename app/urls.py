@@ -27,7 +27,7 @@ schema_view = get_swagger_view(title="Flightbookie API")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/v1/", include(router.urls)),
+    path("v1/", include(router.urls)),
     path("account/", include("user.urls")),
     path("docs/", schema_view),
     path("api/token/",
