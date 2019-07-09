@@ -1,18 +1,17 @@
 """Define view for handling auth operations."""
 
-import logging
-
 from django.contrib.auth import authenticate, get_user_model
-from rest_framework import status, views
+from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
+
+from helper import get_logger
 
 from .serializers import UserSerializer
 
-logger = logging.getLogger(__name__)
-logging.basicConfig(level="ERROR", format="[%(asctime)s] <=>|| %(message)s")
+logger = get_logger(__name__)
 
 
 class UserViewSet(ModelViewSet):
@@ -27,19 +26,27 @@ class UserViewSet(ModelViewSet):
     )
 
 
-class LoginView(views.APIView):
+class LoginViewSet(ViewSet):
     """Define login functionality."""
 
     permission_classes = (AllowAny, )
+    http_method_names = ("post", )
 
-    def post(self, request, *args, **kwargs):
+    def create(self, request, format=None):
         """Handle post request when login in."""
         data = {
             "username": request.data.get("username"),
             "password": request.data.get("password")
         }
+        user = get_user_model().objects.filter(
+            username=data["username"]).first()
+        logger.info("The user attempting to logi exist? %s", user is not None)
+        logger.info("The input username is: %s and password is: %s",
+                    data["username"], data["password"])
         response = {}
         user = authenticate(request, **data)
+        logger.warning("Did the user authenticate successfully? %s",
+                       user is not None)
         if user is not None:
             refresh = RefreshToken.for_user(user)
             token = {
@@ -51,6 +58,8 @@ class LoginView(views.APIView):
             response = {"username": user.username, **token}
             status_code = status.HTTP_200_OK
         else:
+            logger.error(
+                "An error has occured while login in. No user available")
             response = {"error": "Invalid credentials"}
             status_code = status.HTTP_403_FORBIDDEN
         return Response(data=response, status=status_code)
