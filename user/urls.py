@@ -1,15 +1,9 @@
 """Define urls for user auth."""
 
 from rest_framework import routers
-from django.urls import path
-from .views import UserViewSet, LoginView
+from .views import UserViewSet, LoginViewSet
 
 
-router = routers.DefaultRouter()
+router = routers.SimpleRouter()
 router.register(r"users", UserViewSet, basename="user")
-
-urlpatterns = [
-  path(r"login", LoginView.as_view(), name="login")
-]
-
-urlpatterns += router.urls
+router.register(r"login", LoginViewSet, basename="login")

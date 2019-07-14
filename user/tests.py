@@ -82,7 +82,7 @@ class TestUserLogin(APITestCase, BaseTest):
             "username": self.user.username,
             "password": self.user_attr["password"]
         }
-        response = self.client.post(reverse("login"), data)
+        response = self.client.post(reverse("login-list"), data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["id"], self.user.id)
         self.assertEqual(response.data["username"], self.user.username)
@@ -92,17 +92,17 @@ class TestUserLogin(APITestCase, BaseTest):
     def test_login_fails_when_username_is_invalid(self):
         """App should return 404 when signing in with invalid credentials."""
         data = {"username": "404", "password": self.user_attr["password"]}
-        response = self.client.post(reverse("login"), data)
+        response = self.client.post(reverse("login-list"), data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_login_fails_when_password_is_invalid(self):
         """Auth should fail when password is invalid."""
         data = {"username": self.user.username, "password": "wrongpassword"}
-        response = self.client.post(reverse("login"), data)
+        response = self.client.post(reverse("login-list"), data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_login_fails_when_no_username_in_form_is_sent(self):
         """Auth should fail when either username or password is missing."""
         data = {"password": self.user_attr["password"]}
-        response = self.client.post(reverse("login"), data)
+        response = self.client.post(reverse("login-list"), data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
