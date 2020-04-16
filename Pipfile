@@ -1,0 +1,38 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+factory-boy = "*"
+pylint = "*"
+flake8 = "*"
+pytest-django = "*"
+v = {editable = true,version = "*"}
+yapf = "*"
+mock = "*"
+locustio = "*"
+python-coveralls = "*"
+coveralls = "*"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+dj-database-url = "*"
+python-decouple = "*"
+psycopg2 = "*"
+gunicorn = "*"
+django-heroku = "*"
+whitenoise = "*"
+django-filter = "*"
+djangorestframework-simplejwt = "*"
+django-rest-swagger = "*"
+coreapi-cli = "*"
+apscheduler = "*"
+
+[requires]
+python_version = "3.6"
+
+[scripts]
+start = "python manage.py runserver"
+test = "pytest -s"
