@@ -6,6 +6,16 @@ from django.utils import timezone
 
 
 # Create your models here.
+
+"""
+Plane Model:
+    plane : CharField
+    number_of_seats : IntergarField
+"""
+class Plane(models.Model):
+    name = models.CharField(max_length=512, default=None, null=True, blank=True)
+    number_of_seats = models.IntegerField(default=50)
+
 class Flight(models.Model):
     """Flight model definition."""
 
@@ -30,11 +40,5 @@ class Flight(models.Model):
     """
     Add plane to flight model :FK to Plane Model
     """
-
+    plane = models.ForeignKey(Plane, on_delete=models.CASCADE, null=True, default=None, blank=True)
 # create a model for plane
-"""
-Plane Model:
-    plane : CharField
-    number_of_seats : IntergarField
-    destination : Can be FK to destination model or just list of choices
-"""
