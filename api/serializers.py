@@ -11,5 +11,10 @@ class FlightSerializer(ModelSerializer):
         """Meta data for flight object."""
 
         model = Flight
+
         fields = ("id", "origin", "destination", "departure_date",
                   "plane_type")
+
+        """
+        Add new fields "plane"
+        """
