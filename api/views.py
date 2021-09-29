@@ -22,8 +22,7 @@ class FlightViewset(ModelViewSet):
     """Flight viewset."""
 
     queryset = Flight.records.all()
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-                        #   IsAdminWriteOnly | AllowAuthenicUserPatch)
+    permission_classes = (IsAuthenticatedOrReadOnly, IsAdminWriteOnly | AllowAuthenicUserPatch)
     serializer_class = FlightSerializer
     filterset_class = FlightFilter
 
@@ -43,14 +42,14 @@ class FlightViewset(ModelViewSet):
         else:
             plane = request.data['plane']
             # if flight.passengers.filter(username=user_name).exists():
-            if flight.passengers.filter(username=user_name).filter(plane=plane).exists():
+            if flight.passengers.filter(username=user_name).exists():
                 # raise ValidationError(
                 #     detail="Flight has already been booked by you")
-                queryset = flight.passengers.filter(username=user_name).filter(plane=plane)
+                queryset = flight.passengers.filter(username=user_name)
                 data = self.serializer_class(queryset)
                 return Response(data)
             
-            plane = Plane.objects.get(plane=plane)
+            plane = Plane.objects.get(id=plane)
             number_of_seats_availabe = plane.number_of_seats
             if number_of_seats_availabe < 1:
                 return Response({"data":"Seat filled"}, status=status.HTTP_400_BAD_REQUEST)
@@ -59,7 +58,7 @@ class FlightViewset(ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
 
-            number_of_seats_availabe -= 1
+            plane.number_of_seats -= 1
             plane.save()
 
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
