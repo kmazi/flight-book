@@ -10,7 +10,7 @@ from rest_framework.serializers import ValidationError
 from rest_framework.viewsets import ModelViewSet
 
 from .filters import FlightFilter
-from .models import Flight
+from .models import Flight, Plane
 from .permissions import AllowAuthenicUserPatch, IsAdminWriteOnly
 from .serializers import FlightSerializer
 
@@ -38,11 +38,24 @@ class FlightViewset(ModelViewSet):
                 data={"error": "An invalid user is trying to book a flight"},
                 status=status.HTTP_400_BAD_REQUEST)
         else:
+
             if flight.passengers.filter(username=user_name).exists():
                 raise ValidationError(
                     detail="Flight has already been booked by you")
+
+            else:
+                plane = request.data["plane"]
+                plane = Plane.objects.get(id=plane)
+                seats_available = plane.capacity
+                if seats_available < 1:
+                    return Response(
+                        data={"error": "The flight has been fuilly booked"},
+                        status=status.HTTP_400_BAD_REQUEST)
+
             flight.passengers.add(user)
             serializer = self.get_serializer(flight)
+            plane.capacity -=1
+            plane.save()
             return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
