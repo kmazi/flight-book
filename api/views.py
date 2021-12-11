@@ -20,8 +20,8 @@ class FlightViewset(ModelViewSet):
     """Flight viewset."""
 
     queryset = Flight.records.all()
-    permission_classes = (IsAuthenticatedOrReadOnly,
-                          IsAdminWriteOnly | AllowAuthenicUserPatch)
+    #permission_classes = (IsAuthenticatedOrReadOnly,
+    #                      IsAdminWriteOnly | AllowAuthenicUserPatch)
     serializer_class = FlightSerializer
     filterset_class = FlightFilter
 
@@ -31,6 +31,7 @@ class FlightViewset(ModelViewSet):
         flight = self.get_object()
         User = get_user_model()
         user_name = request.data["username"]
+        departure_date = request.data["departure_date"]
         try:
             user = User.objects.get(username=user_name)
         except Exception:
@@ -38,8 +39,7 @@ class FlightViewset(ModelViewSet):
                 data={"error": "An invalid user is trying to book a flight"},
                 status=status.HTTP_400_BAD_REQUEST)
         else:
-
-            if flight.passengers.filter(username=user_name).exists():
+            if flight.passengers.filter(username=user_name, departure_date=departure_date).exists():
                 raise ValidationError(
                     detail="Flight has already been booked by you")
 
@@ -47,16 +47,17 @@ class FlightViewset(ModelViewSet):
                 plane = request.data["plane"]
                 plane = Plane.objects.get(id=plane)
                 seats_available = plane.capacity
-                if seats_available < 1:
+                #                                                                                                                                                                                                                                                                              number = Flight.records.filter(plane_type__icontains="economic").count()
+                if seats_available == Flight.records.all():
                     return Response(
-                        data={"error": "The flight has been fuilly booked"},
+                        data={"error": "The flight has been fully booked"},
                         status=status.HTTP_400_BAD_REQUEST)
 
-            flight.passengers.add(user)
-            serializer = self.get_serializer(flight)
-            plane.capacity -=1
-            plane.save()
-            return Response(data=serializer.data, status=status.HTTP_200_OK)
+                flight.passengers.add(user)
+                serializer = self.get_serializer(flight)
+                #plane.capacity -=1
+                #plane.save()
+                return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 @csrf_exempt

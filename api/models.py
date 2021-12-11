@@ -10,7 +10,7 @@ class Plane(models.Model):
     manufacturer = models.CharField(max_length=256, blank=False, null=False)
     name = models.CharField(max_length=256, blank=False, null=False)
     model = models.CharField(max_length=256, blank=False, null=False)
-    capacity = models.IntegerField(blank=False, null=False, default=1)
+    capacity = models.IntegerField(blank=False, null=False, default=0)
 
 
 class Flight(models.Model):
