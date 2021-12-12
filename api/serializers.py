@@ -1,7 +1,7 @@
 """Define serializers for API."""
 
 from rest_framework.serializers import ModelSerializer
-from .models import Flight
+from .models import Flight, Booking
 
 
 class FlightSerializer(ModelSerializer):
@@ -12,4 +12,4 @@ class FlightSerializer(ModelSerializer):
 
         model = Flight
         fields = ("id", "origin", "destination", "departure_date",
-                  "plane_type")
+                  "plane_type", "capacity", "passengers")

@@ -140,10 +140,10 @@ WSGI_APPLICATION = "app.wsgi.application"
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    "default":
-    config("DATABASE_URL",
-           default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3"),
-           cast=db_url)
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase.sqlite',
+    }
 }
 
 # Password validation
@@ -193,3 +193,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Activate Django-Heroku.
 if HEROKU_APP_ID is not None:
     django_heroku.settings(locals())
+
+AUTHENTICATION_BACKENDS = (
+    ('django.contrib.auth.backends.ModelBackend'),
+)
