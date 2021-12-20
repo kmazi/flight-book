@@ -26,5 +26,15 @@ class Flight(models.Model):
     plane_type = models.CharField(max_length=100,
                                   choices=FLIGHT_TYPES,
                                   default=ECONOMIC)
-
     records = models.Manager()
+    """
+    Add plane to flight model :FK to Plane Model
+    """
+
+# create a model for plane
+"""
+Plane Model:
+    plane : CharField
+    number_of_seats : IntergarField
+    destination : Can be FK to destination model or just list of choices
+"""

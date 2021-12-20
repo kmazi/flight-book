@@ -44,6 +44,13 @@ class FlightViewset(ModelViewSet):
             flight.passengers.add(user)
             serializer = self.get_serializer(flight)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
+    """
+        User makes flight request, payload = ["plane", "destination", "depature_date"]
+          -  Will check if plane exists: Plane.objects,get(id or plane etc)
+          -  Check if user has not booked with this plan before if user has booked return Flights details in response with message
+          -  Then check number of available seats in plane : When a user books a flight, the number should reduce and if number of availabe
+             seats = 0, then plane is filled if not go ahead to book flight and return flight details
+    """
 
 
 @csrf_exempt
