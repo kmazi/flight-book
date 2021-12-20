@@ -1,7 +1,7 @@
 """Define serializers for API."""
 
 from rest_framework.serializers import ModelSerializer
-from .models import Flight
+from .models import Flight, Plane
 
 
 class FlightSerializer(ModelSerializer):
@@ -11,5 +11,10 @@ class FlightSerializer(ModelSerializer):
         """Meta data for flight object."""
 
         model = Flight
+
         fields = ("id", "origin", "destination", "departure_date",
-                  "plane_type")
+                  "plane_type", "plane")
+
+        """
+        Add new fields "plane"
+        """
