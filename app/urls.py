@@ -16,8 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework_simplejwt.views import (TokenObtainPairView,
-                                            TokenRefreshView)
-
+                                            TokenRefreshView)                                        
 from api.urls import router
 from user.urls import router as user_router
 from api.views import home
@@ -28,7 +27,7 @@ schema_view = get_swagger_view(title="Flightbookie API")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("v1/", include(router.urls)),
+    path("v1/", include("api.urls")),
     path("account/", include(user_router.urls)),
     path("docs/", schema_view),
     path("api/token/",

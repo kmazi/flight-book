@@ -106,3 +106,7 @@ class TestUserLogin(APITestCase, BaseTest):
         data = {"password": self.user_attr["password"]}
         response = self.client.post(reverse("login-list"), data)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+
+username = "gbengs", password = "testing1", first_name = "Gbenga", last_name = "Oye", email = "gbengs@gmail.com"
