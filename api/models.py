@@ -26,5 +26,6 @@ class Flight(models.Model):
     plane_type = models.CharField(max_length=100,
                                   choices=FLIGHT_TYPES,
                                   default=ECONOMIC)
+    capacity = models.IntegerField(default=1)
 
     records = models.Manager()

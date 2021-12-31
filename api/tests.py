@@ -158,7 +158,19 @@ class TestFlightBooking(BaseTestClass):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(str(response.data[0]),
                          "Flight has already been booked by you")
+    def test_fail_to_book_flight_that_has_been_fully_booked(self):
+        """App should fail to book a fully booked flight."""
+        test_flight = Flight.records.first()
+        flight_obj = Flight.records.get(pk=test_flight.id) 
+        test_flight.passengers.add(self.user)
+        test_flight.capacity
 
+        response = self.client.patch(reverse('flight-book-flight',
+                                             kwargs={"pk": test_flight.id}),
+                                     data={"username": self.user.username, "capacity": test_flight.capacity})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(str(response.data[0]),
+                         "The flight has been fully booked")
 
 class TestMailMessaging(TestCase):
     """Define tests for flight mail notifications."""
