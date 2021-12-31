@@ -38,9 +38,18 @@ class FlightViewset(ModelViewSet):
                 data={"error": "An invalid user is trying to book a flight"},
                 status=status.HTTP_400_BAD_REQUEST)
         else:
+
             if flight.passengers.filter(username=user_name).exists():
                 raise ValidationError(
-                    detail="Flight has already been booked by you")
+                detail="Flight has already been booked by you")
+
+            if flight.passengers.count() >= flight.capacity:
+                raise ValidationError(
+                detail="The flight has been fully booked")
+
+
+
+                
             flight.passengers.add(user)
             serializer = self.get_serializer(flight)
             return Response(data=serializer.data, status=status.HTTP_200_OK)

@@ -12,4 +12,4 @@ class FlightSerializer(ModelSerializer):
 
         model = Flight
         fields = ("id", "origin", "destination", "departure_date",
-                  "plane_type")
+                  "plane_type", "capacity")
