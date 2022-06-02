@@ -14,7 +14,7 @@ from rest_framework.test import APIClient, APITestCase
 from api.mail import get_mail_notifications, send_mail_notifications
 from factories import FlightFactory, UserFactory
 
-from .models import Flight
+from .models import Flight, Plane
 
 
 # Create your tests here.
@@ -160,6 +160,21 @@ class TestFlightBooking(BaseTestClass):
                          "Flight has already been booked by you")
 
 
+    def test_fail_to_book_fully_booked_flight(self):
+        """App should fail to book a fully booked flight."""
+        test_flight = Flight.records.first()
+        test_flight.passengers.add(self.user)
+        test_plane = Plane.object.filter().only("capacity")
+        test_plane -=1
+        if test_plane < 1:
+
+            response = self.client.patch(reverse('flight-book-flight',
+                                                kwargs={"pk": test_flight.id}),
+                                        data={"username": self.user.username})
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(str(response.data[0]),
+                         "The flight has been fully booked")
+
 class TestMailMessaging(TestCase):
     """Define tests for flight mail notifications."""
 
@@ -207,11 +222,9 @@ class TestMailMessaging(TestCase):
     def test_send_mail_notification_called_on_sending_fligh_mail_notification(
             self, get_connection):
         """App should send mail notification to passengers.
-
         passengers whose flight date is about one day more should receive
         mail notification. Thus the app should call the send_messages() when
         triggered.
-
         """
         self.generate_flight_and_passengers_for_test()
         # Call send_mail_notification after flights have been booked

@@ -6,6 +6,13 @@ from django.utils import timezone
 
 
 # Create your models here.
+class Plane(models.Model):
+    manufacturer = models.CharField(max_length=256, blank=False, null=False)
+    name = models.CharField(max_length=256, blank=False, null=False)
+    model = models.CharField(max_length=256, blank=False, null=False)
+    capacity = models.IntegerField(blank=False, null=False, default=0)
+
+
 class Flight(models.Model):
     """Flight model definition."""
 
@@ -13,7 +20,7 @@ class Flight(models.Model):
     BUSINESS = "business"
     FIRST_CLASS = "first_class"
     FLIGHT_TYPES = [
-        (ECONOMIC, "econimic class"),
+        (ECONOMIC, "economic class"),
         (BUSINESS, "business class"),
         (FIRST_CLASS, "first class"),
     ]
@@ -26,5 +33,7 @@ class Flight(models.Model):
     plane_type = models.CharField(max_length=100,
                                   choices=FLIGHT_TYPES,
                                   default=ECONOMIC)
+
+    plane = models.ForeignKey(Plane, on_delete=models.SET_NULL, null=True)
 
     records = models.Manager()
